@@ -1,0 +1,79 @@
+{% extends "app/base.html" %}
+{% load static %}
+{% block content %}
+
+	<!-- PRODUCT SECTION START -->
+		<div class="product-section">
+			<div class="desc">
+				<p>You are on amazon.com. You can also shop on Amazon India for millions of products with fast local delivery. <a href="#">Click here to go to amazon.in</a></p>
+			</div>
+		</div>
+        
+        
+
+		<div class="productcategories-test">
+			{% for product in object_list %}
+			<div class="boxtest">
+				<div class="catbox-test">
+					<a href="{{ product.get_absolute_url}}">
+					<span style="font-size: 24px;">{{ product.name }}</span></a><button class="label">{{ product.get_label_display }}</button>
+					<a href="{{ product.get_absolute_url}}"><img src="/media/{{ product.pic }}"><br></a>
+						{% if product.discount_pr %}
+						<sup>&#8377;</sup><span class="price">{{ product.price }}</span>
+						<span class="original-price">M.R.P.: </span><span><del>&#8377;{{ product.original_price }}</del></span>
+						<span class="discount">{{ product.discount_pr }}% off</span><br>
+						{% else %}
+						<sup>&#8377;</sup><span class="price">{{ product.original_price }}</span>
+						{% endif %}
+					<a>Shop now</a>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+
+		{% if is_paginated %}
+        <center>
+			<div class="pagination">
+				{% if page_obj.has_previous %}
+				<a href="?page={{ page_obj.previous_page_number }}" class="page-link"><button>&laquo; Prev</button></a>
+				{% endif%}
+				<a href="?page={{ page_obj.number }}" class="page-link"><button>{{ page_obj.number }}</button></a>
+				{% if page_obj.has_next %}
+				<a href="?page={{ page_obj.next_page_number }}" class="page-link"><button>Next &raquo;</button></a>
+				{% endif %}
+			</div>
+		</center>
+		{% endif %}
+
+	<!-- PRODUCT SECTION END -->
+	{% if request.user.is_authenticated %}
+
+	{% else %}
+	<!-- SIGNIN SECTION START -->
+	<div class="signin-section">
+		<div class="signin-button">
+			<div class="signin details">
+				<center>
+					<div style="font-size: 13px;">
+						<span>See personalized recommendations</span>
+					</div>
+				</center>
+
+				<center>
+					<div>
+						<a href="{% url 'login' %}" style="color: black; text-decoration: none;"><button type="button" class="signindetails-button"><b>Sign in</b></button></a>
+					</div>
+				</center>
+
+				<center>
+					<div class="starthere" style="font-size: 11px;">
+						<span>New customer? <a href="{% url 'signup' %}">Start here.</a></span>
+					</div>
+				</center>
+			</div>
+		</div>
+	</div>
+	<!-- SIGNIN SECTION END -->
+	{% endif %}
+
+	{% endblock %}

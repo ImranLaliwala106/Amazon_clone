@@ -1,0 +1,351 @@
+{% load static %}
+{% load cart_template_tags %}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Index</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link rel="stylesheet" type="text/css" href="{% static "style.css" %}">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+	<style>
+		.dropdown {
+			position: relative;
+			display: inline-block;
+		}
+		  
+		.dropdown-content {
+			display: none;
+			position: absolute;
+			min-width: 160px;
+			padding: 12px 16px;
+			z-index: 1;
+		}
+		  
+		.dropdown:hover .dropdown-content {
+			display: block;
+		}
+	</style>	
+</head>
+<body>
+
+	<!-- NAVBAR START -->
+
+	<header>
+		<div class="navbar">
+
+			<!-- LOGO -->
+			<div class="nav-logo border">
+				<div class="logo">
+					<a href="{% url 'index' %}"><img src="{% static 'images/logo2.jpg' %}"></a>
+				</div>
+				{% comment %} <div class="logo">
+					<a href="{% url 'index' %}"><a>
+				</div> {% endcomment %}
+			</div>
+			
+			<!-- LOCATION -->
+			<div class="nav-location border">
+				<p style="color: #CCCCCC; padding-left: 16px; padding-bottom: 2px; font-size: 12px;">Deliver to</p>
+				<div class="loc-icon">
+					<i class="fa-solid fa-location-dot"></i>
+					<p style="padding-left: 5px; font-size: 14px;"><b>India</b></p>
+				</div>
+			</div>
+
+			<!-- SEARCHBAR -->
+			<div class="nav-search">
+				<select class="categories">
+					<option>All</option>
+					<option>Category-1</option>
+					<option>Category-2</option>
+					<option>Category-3</option>
+					<option>Category-4</option>
+					<option>Category-5</option>
+					<option>Category-6</option>
+					<option>Category-7</option>
+					<option>Category-8</option>
+					<option>Category-9</option>
+					<option>Category-10</option>
+				</select>
+				<input class="searchbar" placeholder="Search Amazon">
+				<div class="search-icon">
+					<button class="search-button" type="button"><i class="fa-solid fa-magnifying-glass fa-xl"></i></button>
+				</div>
+			</div>
+
+			<!-- LANGUAGE -->
+			<div class="language">
+				<div class="flag"></div>
+				<div><b>EN</b></div>
+			</div>
+
+			<!-- SIGNIN -->
+
+			{% if request.user.is_authenticated %}
+			<div class="dropdown">
+				<div class="signin border">
+					<span style="font-size: 12px;">Hello, {{ request.user.username }}<br></span>
+					<div style="padding-top: 3px; font-size: 14px;"><b>Account & Lists</b>
+						<div class="dropdown-content">
+							<form method="post" action="{% url 'logout' %}">
+								{% csrf_token %}
+								{% comment %} <button type="submit">Logout</button> {% endcomment %}
+								<a href="{% url 'logout' %}">
+									<button type="button" style="height: 30px;">Logout</button>
+								</a>
+							</form>
+						</div>
+					</div>	
+				</div>
+			</div>	
+			{% else %}
+			<div class="dropdown">
+				<div class="signin border">
+					<span style="font-size: 12px;">Hello, sign in<br></span>
+					<div style="padding-top: 3px; font-size: 14px;"><b>Account & Lists</b>
+						<div class="dropdown-content">
+							<a href="{% url 'login' %}">
+								<button type="button" style="height: 30px;">Sign in</button>
+							</a>
+						</div>	
+					</div>
+				</div>
+			</div>	
+			{% endif %}
+
+			<!-- RETURNS -->
+			<div class="returns border">
+				<p style="padding-bottom: 2px; font-size: 12px;">Returns</p>
+				<div style="font-size: 14px;"><b>& Orders</b></div>
+			</div>
+
+			<!-- CART -->
+			<div class="cart border">
+				<p class="quantity" style="font-size: 14px;"><b>{{ request.user|NavCart }}</b></p>
+				<a href="{% url 'cartorder' %}" style="font-size: 14px; text-decoration: none; color: white;">
+					<i class="fa-solid fa-cart-shopping fa-2xl"></i><b>Cart</b></a>
+				
+				{% comment %} <a href="{% url 'cart' %}"><i class="fa-solid fa-cart-shopping fa-2xl"></i></a>
+				<a href="{% url 'cart' %}" style="font-size: 14px; text-decoration: none; color: white;"><b>Cart</b></a> {% endcomment %}
+			</div>
+		</div>
+	</header>
+
+	<!-- NAVBAR END -->
+
+	<!-- MENU START -->
+
+		<div class="menubar">
+			<div class="all border">
+				<i class="fa-solid fa-bars"></i>
+				<p><b>All</b></p>
+			</div>	
+			<div class="deals border">
+				<p>Today's Deals</p>
+			</div>
+			<div class="registry border">
+				<p>Registry</p>
+			</div>
+			<div class="customer border">
+				<p>Customer Service</p>
+			</div>
+			<div class="gift border">
+				<p>Gift Cards</p>
+			</div>
+			<div class="sell border">
+				<p>Sell</p>
+			</div>
+		</div>
+
+	<!-- MENU END -->
+
+	{% for message in messages %}
+  			<div class="alert {{ message.tags }} alert-dismissible fade show" role="alert" >
+    				{{ message }}
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+  			</div>
+	{% endfor %}
+
+    {% block content %}
+
+
+
+    {% endblock %}
+
+    <div class="top">Back to top</div>
+
+	<!-- LINKS SECTION START -->
+
+	<div class="links-section">
+		<div class="link">
+				<ul>
+					<h4>Get to Know Us</h4>
+					<li>Careers</li>
+					<li>Blog</li>
+					<li>About Amazon</li>
+					<li>Investor Relations</li>
+					<li>Amazon Devices</li>
+					<li>Amazon Science</li>
+				</ul>
+		</div>
+
+		<div class="link">
+				<ul>
+					<h4>Make Money with Us</h4>
+					<li>Sell products on Amazon</li>
+					<li>Sell on Amazon Business</li>
+					<li>Sell apps on Amazon</li>
+					<li>Become an Affiliate</li>
+					<li>Advertise Your Products</li>
+					<li>Self-Publish with Us</li>
+					<li>Host an Amazon Hub</li>
+					<li>› See More Make Money with Us</li>
+				</ul>
+		</div>
+
+		<div class="link">
+				<ul>
+					<h4>Amazon Payment Products</h4>
+					<li>Amazon Business Card</li>
+					<li>Shop with Points</li>
+					<li>Reload Your Balance</li>
+					<li>Amazon Currency Converter</li>
+				</ul>
+		</div>
+
+		<div class="link">
+				<ul>
+					<h4>Let Us Help You</h4>
+					<li>Amazon and COVID-19</li>
+					<li>Your Account</li>
+					<li>Your Orders</li>
+					<li>Shipping Rates & Policies</li>
+					<li>Returns & Replacements</li>
+					<li>Manage Your Content and Devices</li>
+					<li>Amazon Assistant</li>
+					<li>Help</li>
+				</ul>
+		</div>	
+	</div>
+	<!-- LINKS SECTION END -->
+
+	<!-- FOOTER START -->
+	<div class="mainfooter">
+		<div class="footer">
+			<div class="footer-box">
+				<p><b>Amazon Music</b></p>
+				<p>Stream millions of songs</p>
+			</div>
+			<div class="footer-box">
+				<p><b>Amazon Ads</b></p>
+				<p>Reach customers wherever they spend their time</p>
+			</div>
+			<div class="footer-box">
+				<p><b>6pm</b></p>
+				<p>Score deals on fashion brands</p>
+			</div>
+			<div class="footer-box">
+				<p><b>AbeBooks</b></p>
+				<p>Books, art & collectibles</p>
+			</div>
+			<div class="footer-box">
+				<p><b>ACX</b></p>
+				<p>Audiobook Publishing Made Easy</p>
+			</div>
+			<div class="footer-box">
+				<p><b>Sell on Amazon</b></p>
+				<p>Start a Selling Account</p>
+			</div>
+			<div class="footer-box">
+				<p><b>Amazon Business</b></p>
+				<p>Everything For Your Business</p>
+			</div>
+			<div class="footer-box">
+				<p><b>AmazonGlobal</b></p>
+				<p>Ship Orders Internationally</p>
+			</div>
+			<div class="footer-box">
+				<p><b>Home Services</b></p>
+				<p>Experienced Pros Happiness Guarantee</p>
+			</div>
+			<div class="footer-box">
+				<p><b>Amazon Web Services</b></p>
+				<p>Scalable Cloud Computing Services</p>
+			</div>
+			<div class="footer-box">
+				<p><b>Audible</b></p>
+				<p>Listen to Books & Original Audio Performances</p>
+			</div>
+			<div class="footer-box">
+				<p><b>Box Office Mojo</b></p>
+				<p>Find Movie Box Office Data</p>
+			</div>
+			<div class="footer-box">
+				<p><b>Goodreads</b></p>
+				<p>Book reviews & recommendations</p>
+			</div>
+			<div class="footer-box">
+				<p><b>IMDb</b></p>
+				<p>Movies, TV & Celebrities</p>
+			</div>
+			<div class="footer-box">
+				<p><b>IMDbPro</b></p>
+				<p>Get Info Entertainment Professionals Need</p>
+			</div>
+			<div class="footer-box">
+				<p><b>Kindle Direct Publishing</b></p>
+				<p>Indie Digital & Print Publishing Made Easy</p>
+			</div>
+			<div class="footer-box">
+				<p><b>Prime Video Direct</b></p>
+				<p>Video Distribution Made Easy</p>
+			</div>
+			<div class="footer-box">
+				<p><b>Shopbop</b></p>
+				<p>Designer Fashion Brands</p>
+			</div>
+			<div class="footer-box">
+				<p><b>Woot!</b></p>
+				<p>Deals and Shenanigans</p>
+			</div>
+			<div class="footer-box">
+				<p><b>Zappos</b></p>
+				<p>Shoes & Clothing</p>
+			</div>
+			<div class="footer-box">
+				<p><b>Ring</b></p>
+				<p>Smart Home Security Systems</p>
+			</div>
+			<div class="footer-box">
+				<p><b>eero WiFi</b></p>
+				<p>Stream 4K Video in Every Room</p>
+			</div>
+			<div class="footer-box">
+				<p><b>Blink</b></p>
+				<p>Smart Security for Every Home</p>
+			</div>
+			<div class="footer-box">
+				<p><b>Neighbors App</b></p>
+				<p>Real-Time Crime & Safety Alerts</p>
+			</div>
+			<div class="footer-box">
+				<p><b>Amazon Subscription Boxes</b></p>
+				<p>Top subscription boxes – right to your door</p>
+			</div>
+			<div class="footer-box">
+				<p><b>PillPack</b></p>
+				<p>Pharmacy Simplified</p>
+			</div>
+		</div>
+
+		<div class="footer2">
+			<center><a>Conditions of Use</a><a>Privacy Notice</a><a>Your Ads Privacy Choices</a></center>
+			<center><p>© 1996-2023, Amazon.com, Inc. or its affiliates</p></center>
+		</div>
+	</div>
+	<!-- FOOTER END -->
+</body>
+</html>
+    

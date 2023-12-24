@@ -1,0 +1,59 @@
+{% extends "app/base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="product-detail">
+    
+    <div class="product-image">
+        <img src="/media/{{ product.pic }}">
+    </div>
+
+    <div class="product-desc">
+        <p style="font-size: 24px; border-bottom: 1px ridge grey">{{ product.name }}</p>
+        <button class="prlabel">{{ product.get_label_display }}</button><br>
+        {% if product.discount_pr %}
+        <span class="prdiscount">-{{ product.discount_pr }}% </span><sup>&#8377;</sup><span class="price">{{ product.price }}</span><br>
+		<p class="proriginal-price" style="font-size:14px;">M.R.P.: </span><span><del>&#8377;{{ product.original_price }}</del></p><br>
+        {% else %}
+        <sup>&#8377;</sup><span class="price">{{ product.original_price }}</span><br>
+        {% endif %}
+        <p>{{ product.desc }}</p>
+        <a href={{ object.get_add_to_cart_url }}><button class="atc">Add to Cart</button></a>
+        <a href={{ object.get_remove_from_cart_url }}><button class="atc">Remove from Cart</button></a>
+	</div> 
+    
+</div>
+
+
+<!-- PRODUCT SECTION END -->
+{% if request.user.is_authenticated %}
+
+{% else %}
+<!-- SIGNIN SECTION START -->
+<div class="signin-section">
+    <div class="signin-button">
+        <div class="signin details">
+            <center>
+                <div style="font-size: 13px;">
+                    <span>See personalized recommendations</span>
+                </div>
+            </center>
+
+            <center>
+                <div>
+                    <a href="{% url 'login' %}" style="color: black; text-decoration: none;"><button type="button" class="signindetails-button"><b>Sign in</b></button></a>
+                </div>
+            </center>
+
+            <center>
+                <div class="starthere" style="font-size: 11px;">
+                    <span>New customer? <a href="{% url 'signup' %}">Start here.</a></span>
+                </div>
+            </center>
+        </div>
+    </div>
+</div>
+<!-- SIGNIN SECTION END -->
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,69 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Sign in</title>
+	<link rel="stylesheet" type="text/css" href="{% static "style.css" %}">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+
+	{% for message in messages %}
+  			<div class="alert {{ message.tags }} alert-dismissible fade show" role="alert" >
+    				{{ message }}
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+  			</div>
+	{% endfor %}
+	
+<center>
+	<div class="signup-logo">
+		<a href="{% url 'index' %}"><img src="{% static 'images/signup_logo.png' %}" style="height: 35px; width: 105px;"></a>
+	</div>
+</center>
+
+<div style="display: flex; justify-content: center; align-items: center; ">
+	<div class="signup-form">
+		 <div>
+			<h1 style="font-weight: normal;">Sign in</h1>
+		</div>
+		<form method="POST">
+			{% csrf_token %}
+			{% comment %} <div>
+				<label for="email">Email</label><br>
+				<input type="email" name="email" required>
+			</div> {% endcomment %}
+
+			<div>
+				<label for="username">Username</label><br>
+				<input type="text" name="username" required>
+			</div>
+
+			<div>
+				<label for="password">Password</label><br>
+				<input type="password" name="password" required><br>
+			</div>
+
+			<div>
+				<a href="" style="color: black; text-decoration: none;"><button type="submit" class="signindetails-button" style="width:95%;"><b>Sign in</b></button></a>
+			</div>
+		</form>
+	</div>
+</div>
+
+<center>
+	<div class="after-login">
+		<h5 style="font-weight: lighter; color: grey;">
+			<sup>------------------------------------ </sup>New to Amazon?<sup>  -------------------------------------</sup>
+		</h5>
+		<a class="signin-create" href="{% url 'signup' %}" style="color: black; text-decoration: none; margin-top: 10px; border-radius: 4px;">
+			<button type="button" style="width: 390px; height: 30px;">Create your Amazon account</button>
+		</a>
+	</div>
+</center>
+
+
+</body>
+</html>

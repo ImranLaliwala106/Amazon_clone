@@ -1,0 +1,125 @@
+{% extends "app/base.html" %}
+{% load static %}
+{% block content %}
+
+{% comment %} <div>
+	<div class="cart-page">
+		<div>
+			<img src="{% static 'images/cart.svg' %}" style="height: 240px; margin-left: 10px;">
+		</div>
+		<div class="cart-content" style="margin-left: 10px;">
+			<div><h2>Your Amazon Cart is empty</h2></div>
+			<div><a href="" style="font-size: 14px;">Shop today’s deals</a></div><br>
+
+			{% if request.user.is_authenticated %}
+
+
+			{% else %}
+			<div>
+				<a href="{% url 'login' %}" style="color: black; text-decoration: none; font-size: 16px;">
+					<button type="button" class="cart-signin">Sign in to your account</button>
+				</a>
+				<a class="signin-create" href="{% url 'signup' %}" style="color: black; text-decoration: none; margin-top: 10px; border-radius: 4px">
+					<button type="button" style="height: 30px;">Sign up now</button>
+				</a>
+			</div>
+			{% endif %}
+		</div>
+	</div>
+</div>  {% endcomment %}
+
+<div>
+	<div class="cart-page">
+		<h1 style="border-bottom: 1px solid grey; padding-bottom: 10px;">Shopping Cart</h1>
+
+		<div style="display: flex; justify-content: center;">
+			<table id="customers">
+				<tr>
+				<th>#</th>	
+				<th>Product name</th>
+				<th>Price</th>
+				<th>Quantity</th>
+				<th>Total price</th>
+				</tr>
+
+				{% for product_order in object.products.all %}
+				<tr>
+					<td>{{ forloop.counter }}</td>
+					<td>{{ product_order.products.name }}</td>
+					<td>
+						{% if product_order.products.discount_pr %}
+							&#8377;{{ product_order.products.price }}
+						{% else %}
+							&#8377;{{ product_order.products.original_price }}
+						{% endif %}
+					</td>
+					<td>
+						<a href="{% url 'remove_single_item_from_cart' product_order.products.slug %}"><button><i class="fa-solid fa-minus"> </i></button></a>
+						 	{{ product_order.quantity }} 
+						<a href="{% url 'add_to_cart' product_order.products.slug %}"><button><i class="fa-solid fa-plus"></i></button></a>
+					</td>
+					<td>
+					{% if product_order.products.discount_pr %}
+						&#8377;{{ product_order.get_total_discount_price }}
+					{% else %}
+						&#8377;{{ product_order.get_total_product_price }}
+					{% endif %}
+					<a href="{% url 'remove_from_cart' product_order.products.slug %}" style="float:right;">
+						<button><i class="fa-solid fa-trash-can"></i></button>
+					</a>
+					</td>
+				</tr>
+				{% empty %}
+					<tr>
+						<td colspan="4"><center>Your cart is empty</center></td>
+						<td><a href="{% url 'index' %}" style="color: black; text-decoration: none; float:right;">
+							<button class="signindetails-button">Continue shopping</button></a>
+						</td>
+					</tr>
+					
+				{% endfor %}
+				{% if object.get_subtotal %}
+				<tr>
+					<td colspan="4"><b>Order Total</b></td>
+					<td>&#8377;{{ object.get_subtotal }}</td>
+				</tr>
+				<tr>
+					<td colspan="5"><a href="" style="color: black; text-decoration: none; float:right;"><button class="signindetails-button">Proceed to checkout</button></a></td>
+				</tr>	
+				{% endif %}	
+			</table>
+		</div>
+	</div>
+</div>
+
+{% if request.user.is_authenticated %}
+
+{% else %}
+<!-- SIGNIN SECTION START -->
+	<div class="signin-section">
+		<div class="signin-button">
+			<div class="signin details">
+				<center>
+					<div style="font-size: 13px;">
+						<span>See personalized recommendations</span>
+					</div>
+				</center>
+
+				<center>
+					<div>
+						<a href="{% url 'login' %}" style="color: black; text-decoration: none;"><button type="button" class="signindetails-button"><b>Sign in</b></button></a>
+					</div>
+				</center>
+
+				<center>
+					<div class="starthere" style="font-size: 11px;">
+						<span>New customer? <a href="{% url 'signup' %}">Start here.</a></span>
+					</div>
+				</center>
+			</div>
+		</div>
+	</div>
+	<!-- SIGNIN SECTION END -->
+{% endif %}
+
+{% endblock %}
